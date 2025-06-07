@@ -4,9 +4,38 @@ export class Tree {
   constructor(arr) {
     const sortedArr = this.mergeSort(arr);
     this._root = this.buildTree(sortedArr);
+  }
+
+  insert(val) {
+    console.log(this.prettyPrint(this._root));
+
+    const node = new Node();
+    node.val = val;
+    var cur = this._root;
+
+    while (true) {
+      if (val < cur.val) {
+        if (!cur.left) {
+          cur.left = node;
+          break;
+        }
+        cur = cur.left;
+      } else if (val > cur.val) {
+        if (!cur.right) {
+          cur.right = node;
+
+          break;
+        }
+        cur = cur.right;
+      } else {
+        break;
+      }
+    }
 
     console.log(this.prettyPrint(this._root));
   }
+
+  deleteValue(val) {}
 
   // takes an array and turns it into a balanced tree
   // returns the level 0 root node
@@ -68,7 +97,6 @@ export class Tree {
     return newArr;
   }
 
-  
   prettyPrint(node, prefix = "", isLeft = true) {
     if (node === null) {
       return;
