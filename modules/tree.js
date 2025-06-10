@@ -7,8 +7,6 @@ export class Tree {
   }
 
   insert(val) {
-    console.log(this.prettyPrint(this._root));
-
     const node = new Node();
     node.val = val;
     var cur = this._root;
@@ -17,25 +15,95 @@ export class Tree {
       if (val < cur.val) {
         if (!cur.left) {
           cur.left = node;
-          break;
+          return;
         }
         cur = cur.left;
       } else if (val > cur.val) {
         if (!cur.right) {
           cur.right = node;
 
-          break;
+          return;
         }
         cur = cur.right;
       } else {
-        break;
+        return;
       }
+    }
+  }
+
+  delete(val) {
+    console.log(this.prettyPrint(this._root));
+    const nodeParent = this.findNodeParent(this._root, val);
+    var node;
+    if (nodeParent && nodeParent.left.val == val) {
+      node = nodeParent.left;
+
+      if (node.left && node.right) {
+        const smallestNode = this.findSmallestNode(node.right, val);
+
+        smallestNode.left = node.left;
+        smallestNode.right = node.right;
+        nodeParent.left = smallestNode;
+      } else if (node.left) {
+        nodeParent.left = node.left;
+      } else if (node.right) {
+        nodeParent.left = node.right;
+      } else {
+        nodeParent.left = null;
+      }
+    } else if (nodeParent && nodeParent.right.val == val) {
+      const node = nodeParent.right;
+
+      if (node.left && node.right) {
+        const smallestNode = this.findSmallestNode(node.right, val);
+
+        smallestNode.left = node.left;
+        smallestNode.right = node.right;
+        nodeParent.right = smallestNode;
+      } else if (node.left) {
+        nodeParent.right = node.left;
+      } else if (node.right) {
+        nodeParent.right = node.right;
+      } else {
+        nodeParent.right = null;
+      }
+    } else if (nodeParent.val == this._root.val) {
+      node = nodeParent;
+      const smallestNode = this.findSmallestNode(node.right, val);
+      smallestNode.left = node.left;
+      smallestNode.right = node.right;
+      this._root = smallestNode;
     }
 
     console.log(this.prettyPrint(this._root));
   }
 
-  deleteValue(val) {}
+  findNodeParent(node, val) {
+    if (this._root.val == val) return node;
+
+    if (
+      (node.left && node.left.val == val) ||
+      (node.right && node.right.val == val)
+    )
+      return node;
+    if (node.left && val < node.val) {
+      return this.findNodeParent(node.left, val);
+    } else if (node.right && val > node.val) {
+      return this.findNodeParent(node.right, val);
+    } else {
+      return null;
+    }
+  }
+
+  findSmallestNode(node, val) {
+    if (node.left.left == null) {
+      const temp = node.left;
+      node.left = null;
+      return temp;
+    }
+
+    return this.findSmallestNode(node.left, val);
+  }
 
   // takes an array and turns it into a balanced tree
   // returns the level 0 root node
