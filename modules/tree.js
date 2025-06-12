@@ -6,6 +6,19 @@ export class Tree {
     this._root = this.buildTree(sortedArr);
   }
 
+  find(val) {
+    var cur = this._root;
+
+    while (cur && cur.val != val) {
+      if (val < cur.val) {
+        cur = cur.left;
+      } else if (val > cur.val) {
+        cur = cur.right;
+      }
+    }
+    return cur;
+  }
+
   insert(val) {
     const node = new Node();
     node.val = val;
@@ -32,7 +45,6 @@ export class Tree {
   }
 
   delete(val) {
-    console.log(this.prettyPrint(this._root));
     const nodeParent = this.findNodeParent(this._root, val);
     var node;
     if (nodeParent && nodeParent.left.val == val) {
@@ -74,8 +86,6 @@ export class Tree {
       smallestNode.right = node.right;
       this._root = smallestNode;
     }
-
-    console.log(this.prettyPrint(this._root));
   }
 
   findNodeParent(node, val) {
