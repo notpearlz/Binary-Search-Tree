@@ -6,6 +6,19 @@ export class Tree {
     this._root = this.buildTree(sortedArr);
   }
 
+  levelOrder(callback) {
+    const queue = [];
+
+    if (this._root) queue.push(this._root);
+
+    while (queue.length > 0) {
+      const curr = queue.shift();
+
+      callback(curr);
+      if (curr.left) queue.push(curr.left);
+      if (curr.right) queue.push(curr.right);
+    }
+  }
   find(val) {
     var cur = this._root;
 
