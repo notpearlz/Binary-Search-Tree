@@ -4,6 +4,34 @@ export class Tree {
   constructor(arr) {
     const sortedArr = this.mergeSort(arr);
     this._root = this.buildTree(sortedArr);
+
+    //console.log(this.prettyPrint(this._root));
+  }
+
+  inOrder(callback) {
+    const arr = this.inOrderRecur(this._root);
+
+    while(arr.length > 0){
+      const cur = arr.shift();
+
+      callback(cur);
+    }
+
+  }
+
+  inOrderRecur(node) {
+    if (!node) return;
+    var arr = [];
+
+    arr.push(node);
+    if (node.left) {
+      arr = arr.concat(this.inOrderRecur(node.left));
+    }
+    if (node.right) {
+      arr = arr.concat(this.inOrderRecur(node.right));
+    }
+
+    return arr;
   }
 
   levelOrder(callback) {
@@ -12,13 +40,14 @@ export class Tree {
     if (this._root) queue.push(this._root);
 
     while (queue.length > 0) {
-      const curr = queue.shift();
+      const cur = queue.shift();
 
       callback(curr);
-      if (curr.left) queue.push(curr.left);
-      if (curr.right) queue.push(curr.right);
+      if (cur.left) queue.push(cur.left);
+      if (cur.right) queue.push(cur.right);
     }
   }
+
   find(val) {
     var cur = this._root;
 
