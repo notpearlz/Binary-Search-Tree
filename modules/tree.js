@@ -8,15 +8,71 @@ export class Tree {
     //console.log(this.prettyPrint(this._root));
   }
 
-  inOrder(callback) {
-    const arr = this.inOrderRecur(this._root);
+  depth(val) {
+    const depth = this.depthRecur(this._root, val) - 1;
+    if (depth) {
+      return depth;
+    } else return null;
+  }
 
-    while(arr.length > 0){
-      const cur = arr.shift();
+  depthRecur(node, val) {
+    if (node.val == val) return 1;
 
-      callback(cur);
+    if (node.left) {
+      var left = this.depthRecur(node.left, val);
+    }
+    if (node.right) {
+      var right = this.depthRecur(node.right, val);
     }
 
+    if (left > 0) {
+      return left + 1;
+    } else if (right > 0) {
+      return right + 1;
+    }
+  }
+
+  height(val) {
+    return this.heightRecur(this.find(val)) - 1;
+  }
+
+  heightRecur(node) {
+    if (node == null) return null;
+    if (node.left) {
+      var left = this.heightRecur(node.left);
+    }
+    if (node.right) {
+      var right = this.heightRecur(node.right);
+    }
+
+    if (left && right) {
+      if (left >= right) {
+        return left + 1;
+      } else {
+        return right + 1;
+      }
+    } else if (left) {
+      return left + 1;
+    } else if (right) {
+      return right + 1;
+    } else {
+      return 1;
+    }
+  }
+
+  inOrder(callback) {
+    try {
+      if (!callback) throw "Callback Required";
+      const arr = this.inOrderRecur(this._root);
+
+      while (arr.length > 0) {
+        const cur = arr.shift();
+
+        callback(cur);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   inOrderRecur(node) {
@@ -35,16 +91,21 @@ export class Tree {
   }
 
   levelOrder(callback) {
-    const queue = [];
+    try {
+      if (!callback) throw "Callback Required";
+      const queue = [];
 
-    if (this._root) queue.push(this._root);
+      if (this._root) queue.push(this._root);
 
-    while (queue.length > 0) {
-      const cur = queue.shift();
+      while (queue.length > 0) {
+        const cur = queue.shift();
 
-      callback(curr);
-      if (cur.left) queue.push(cur.left);
-      if (cur.right) queue.push(cur.right);
+        callback(curr);
+        if (cur.left) queue.push(cur.left);
+        if (cur.right) queue.push(cur.right);
+      }
+    } catch (e) {
+      console.log(e);
     }
   }
 
