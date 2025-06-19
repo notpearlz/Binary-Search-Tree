@@ -4,8 +4,38 @@ export class Tree {
   constructor(arr) {
     const sortedArr = this.mergeSort(arr);
     this._root = this.buildTree(sortedArr);
+  }
 
-    //console.log(this.prettyPrint(this._root));
+  reblanace() {
+    const newArr = [];
+
+    this.inOrder((x)=>{
+      newArr.push(x.val);
+    })
+
+    this._root = this.buildTree(newArr);
+
+  }
+
+  isBalanced() {
+    console.log(this.prettyPrint(this._root));
+    console.log(this.isBalancedRecur(this._root));
+  }
+
+  isBalancedRecur(node) {
+    if (!node) return true;
+
+    const left = this.isBalancedRecur(node.left);
+    const right = this.isBalancedRecur(node.right);
+
+    const leftHeight = node.left ? this.height(node.left.val) : -1;
+    const rightHeight = node.right ? this.height(node.right.val) : -1;
+
+    if (left && right && Math.abs(leftHeight - rightHeight) <= 1) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   depth(val) {
